@@ -62,6 +62,3 @@ docker-compose down
 - Backend: Go, Gin
 - Database: MySQL
 - Containerization: Docker, Docker Compose
-
-## License
-[Add your license information here]
