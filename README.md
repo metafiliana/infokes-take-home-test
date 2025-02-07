@@ -22,17 +22,12 @@ git clone https://github.com/yourusername/infokes-take-home-test.git
 cd infokes-take-home-test
 ```
 
-2. Create a `.env` file in the project root (if needed for environment variables):
-```bash
-touch .env
-```
-
-3. Build and start the application:
+2. Build and start the application:
 ```bash
 docker-compose up --build
 ```
 
-4. Access the application:
+3. Access the application:
 - Frontend: `http://localhost`
 - Backend API: `http://localhost:8080`
 
