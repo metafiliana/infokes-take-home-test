@@ -20,7 +20,7 @@ type FolderRepository interface {
 
 func (r *folderRepository) GetFolders() ([]models.Folder, error) {
 	var folders []models.Folder
-	if err := r.db.Where("parent_id IS NULL").Find(&folders).Error; err != nil {
+	if err := r.db.Preload("Files").Where("parent_id IS NULL").Find(&folders).Error; err != nil {
 		return nil, err
 	}
 	return folders, nil
@@ -28,7 +28,7 @@ func (r *folderRepository) GetFolders() ([]models.Folder, error) {
 
 func (r *folderRepository) GetSubFolders(folderId int) ([]models.Folder, error) {
 	var folders []models.Folder
-	if err := r.db.Where("parent_id = ?", folderId).Find(&folders).Error; err != nil {
+	if err := r.db.Preload("Files").Where("parent_id = ?", folderId).Find(&folders).Error; err != nil {
 		return nil, err
 	}
 	return folders, nil

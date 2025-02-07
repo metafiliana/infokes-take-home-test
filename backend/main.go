@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/infokes-take-home-test/backend/configs"
 	"github.com/infokes-take-home-test/backend/handlers"
 	"github.com/infokes-take-home-test/backend/repositories"
 	"github.com/infokes-take-home-test/backend/usecases"
@@ -21,8 +22,11 @@ var (
 )
 
 func main() {
+	// init env config variable
+	cfg := configs.Get()
+
 	// Initialize database
-	db = initDb()
+	db = initDb(cfg)
 
 	// Create Gin router
 	r := gin.Default()
@@ -47,26 +51,21 @@ func main() {
 	handler := handlers.NewFolderHandler(folderUsecase)
 
 	// Group routes
-	api := r.Group("/api")
+	v1 := r.Group("/api/v1")
 	{
 		// Example folder routes
-		api.GET("/folders", handler.GetFolders)
-		api.GET("/folders/:id", handler.GetSubFolders)
+		v1.GET("/folders", handler.GetFolders)
+		v1.GET("/folders/:id", handler.GetSubFolders)
 	}
 
 	// Start server
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
-	fmt.Printf("Server starting on port %s\n", port)
-	if err := r.Run(":" + port); err != nil {
+	fmt.Printf("Server starting on port %s\n", cfg.RestPort)
+	if err := r.Run(":" + cfg.RestPort); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 }
 
-func initDb() *gorm.DB {
+func initDb(cfg configs.Config) *gorm.DB {
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		logger.Config{
@@ -78,7 +77,7 @@ func initDb() *gorm.DB {
 
 	// local mode development
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
-		"root", "", "localhost", "3306", "infokes-take-home-test")
+		cfg.DBUsername, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,

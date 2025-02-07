@@ -15,4 +15,7 @@ INSERT INTO folder (name, parent_id) VALUES
     ('Folder 3', NULL),
     ('Sub Folder 2', 1),
     ('Sub Folder 3', 1),
-    ('Sub Folder 4', 2);
+    ('Sub Folder 4', 2),
+    ('Sub sub Folder 1', 5),
+    ('Sub sub Folder 2', 5),
+    ('Sub sub Folder 3', 6);
