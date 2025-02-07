@@ -27,7 +27,9 @@ cd infokes-take-home-test
 docker-compose up --build
 ```
 
-3. Access the application:
+3. Apply migrations. Execute migrations script under `./backend/db/mysql/migrations`:
+
+4. Access the application:
 - Frontend: `http://localhost`
 - Backend API: `http://localhost:8080`
 
