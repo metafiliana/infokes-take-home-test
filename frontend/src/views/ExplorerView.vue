@@ -44,6 +44,6 @@ onMounted(loadAllFolders);
   height: 100vh;
 }
 .left-panel, .right-panel {
-  width: 50%;
+  width: 100%;
 }
 </style>

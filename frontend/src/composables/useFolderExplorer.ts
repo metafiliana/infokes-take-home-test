@@ -6,6 +6,7 @@ export function useFolderExplorer() {
   const allFolders: Ref<Folder[]> = ref([]);
   const selectedFolderSubfolders: Ref<Folder[]> = ref([]);
   const selectedFolder: Ref<Folder | null> = ref(null);
+  const selectedFile: Ref<File | null> = ref(null);
 
   async function loadAllFolders() {
     allFolders.value = await folderService.getAllFolders();
@@ -23,11 +24,16 @@ export function useFolderExplorer() {
     }
   }
 
+  async function selectFile(file: File) {
+    selectedFile.value = file;
+  }
+
   return {
     allFolders,
     selectedFolderSubfolders,
     selectedFolder,
     loadAllFolders,
-    selectFolder
+    selectFolder,
+    selectFile
   };
 }

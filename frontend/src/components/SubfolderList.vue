@@ -1,7 +1,8 @@
 <template>
   <div class="subfolder-list">
-    <h3>Subfolders of {{ selectedFolder?.name }}</h3>
-    <ul v-if="subfolders.length">
+    <h3 v-if="selectedFolder">Subfolders of {{ selectedFolder.name }}</h3>
+    <h3 v-else>Select a folder to view subfolders</h3>
+    <ul v-if="selectedFolder && subfolders.length">
       <li 
         v-for="subfolder in subfolders" 
         :key="subfolder.id" 
@@ -12,7 +13,18 @@
         {{ subfolder.name }}
       </li>
     </ul>
-    <p v-else>No subfolders</p>
+    <p v-else-if="selectedFolder">No subfolders</p>
+    <!-- Files list for each subfolder -->
+    <ul v-if="selectedFolder && selectedFolder.files && selectedFolder.files.length" class="files-list">
+      <li 
+        v-for="file in selectedFolder.files" 
+        :key="file.id" 
+        class="file-item"
+      >
+        {{ file.name }}
+      </li>
+    </ul>
+    <p v-else>No files</p>
   </div>
 </template>
 
@@ -39,18 +51,31 @@ function onSelectSubfolder(folder: Folder) {
 
 <style scoped>
 .subfolder-list {
-  padding: 10px;
   height: 100%;
-  overflow-y: auto;
+  margin: 0;
+  box-sizing: border-box;
 }
 .subfolder-item {
-  padding: 5px;
-  border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
-.subfolder-item:hover {
-  background-color: #f5f5f5;
+.subfolder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.file-count {
+  color: #888;
+  font-size: 0.8em;
+}
+.files-list {
+  margin-top: 5px;
+  padding-left: 15px;
+  font-size: 0.9em;
+  color: #666;
+}
+.file-item {
+  padding: 2px 0;
+  border-bottom: 1px solid #f5f5f5;
 }
 .subfolder-item.selected {
   background-color: #e0e0e0;
