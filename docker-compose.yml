@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: infokes-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: infokes_db
+      MYSQL_USER: infokes_user
+      MYSQL_PASSWORD: infokes_password
+    ports:
+      - "3000:3000"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./backend/db/mysql/migrations:/docker-entrypoint-initdb.d
+    restart: always
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: infokes-backend
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=infokes_user
+      - DB_PASSWORD=infokes_password
+      - DB_NAME=infokes_db
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    restart: always
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: infokes-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  mysql-data:
